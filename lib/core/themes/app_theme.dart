@@ -64,74 +64,81 @@ class AppTheme {
       headlineLarge: secondaryTextTheme.headlineLarge,
     );
 
+    final updatedColorScheme = colorScheme.copyWith(
+      surfaceContainerLowest: brightness == Brightness.dark ? const Color(0xFF1F1D2B) : colorScheme.surfaceContainerLowest,
+      surface: brightness == Brightness.dark ? const Color(0xFF252836) : colorScheme.surface,
+      surfaceContainer: brightness == Brightness.dark ? const Color(0xFF2D303E) : colorScheme.surfaceContainer,
+      primary: const Color(0xFFFF9F43), // The orange from the screenshot
+    );
+
     return ThemeData(
       useMaterial3: true,
-      colorScheme: colorScheme,
+      colorScheme: updatedColorScheme,
       brightness: brightness,
       visualDensity: VisualDensity.adaptivePlatformDensity,
-      scaffoldBackgroundColor: colorScheme.surfaceContainerLowest,
+      scaffoldBackgroundColor: updatedColorScheme.surfaceContainerLowest,
       textTheme: textTheme.apply(
-        bodyColor: colorScheme.onSurface,
-        displayColor: colorScheme.onSurface,
-        decorationColor: colorScheme.onSurface,
+        bodyColor: updatedColorScheme.onSurface,
+        displayColor: updatedColorScheme.onSurface,
+        decorationColor: updatedColorScheme.onSurface,
       ),
       appBarTheme: AppBarTheme(
-        backgroundColor: colorScheme.surfaceContainerLowest,
-        shadowColor: colorScheme.surfaceContainerHighest,
+        backgroundColor: updatedColorScheme.surfaceContainerLowest,
+        shadowColor: updatedColorScheme.surfaceContainerHighest,
         elevation: 0.5,
         scrolledUnderElevation: 0.5,
         titleSpacing: AppSizes.padding,
         titleTextStyle: textTheme.titleLarge?.copyWith(
           fontWeight: FontWeight.bold,
           fontSize: 16,
-          color: colorScheme.onSurface,
+          color: updatedColorScheme.onSurface,
         ),
       ),
       tabBarTheme: TabBarThemeData(
-        labelColor: colorScheme.onSurface,
-        unselectedLabelColor: colorScheme.onSurface,
+        labelColor: updatedColorScheme.onSurface,
+        unselectedLabelColor: updatedColorScheme.onSurface,
         indicator: BoxDecoration(
           border: Border(
-            bottom: BorderSide(color: colorScheme.primary, width: 2),
+            bottom: BorderSide(color: updatedColorScheme.primary, width: 2),
           ),
         ),
       ),
       floatingActionButtonTheme: FloatingActionButtonThemeData(
-        backgroundColor: colorScheme.secondaryContainer,
-        foregroundColor: colorScheme.onSecondaryContainer,
+        backgroundColor: updatedColorScheme.secondaryContainer,
+        foregroundColor: updatedColorScheme.onSecondaryContainer,
       ),
       navigationRailTheme: NavigationRailThemeData(
-        backgroundColor: colorScheme.surface,
-        selectedIconTheme: IconThemeData(color: colorScheme.onSecondaryContainer),
-        indicatorColor: colorScheme.secondaryContainer,
+        backgroundColor: updatedColorScheme.surface,
+        selectedIconTheme: IconThemeData(color: updatedColorScheme.onSecondaryContainer),
+        indicatorColor: updatedColorScheme.secondaryContainer,
       ),
       chipTheme: ChipThemeData(
-        backgroundColor: colorScheme.surface,
+        backgroundColor: updatedColorScheme.surface,
       ),
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
-        backgroundColor: colorScheme.surfaceContainerLowest,
-        selectedItemColor: colorScheme.primary,
-        unselectedItemColor: colorScheme.outline,
+        backgroundColor: updatedColorScheme.surfaceContainerLowest,
+        selectedItemColor: updatedColorScheme.primary,
+        unselectedItemColor: updatedColorScheme.outline,
         showUnselectedLabels: true,
         type: BottomNavigationBarType.fixed,
         selectedLabelStyle: textTheme.labelSmall?.copyWith(fontWeight: FontWeight.bold, fontSize: 10),
         unselectedLabelStyle: textTheme.labelSmall?.copyWith(fontWeight: FontWeight.bold, fontSize: 10),
       ),
       dividerTheme: DividerThemeData(
-        color: colorScheme.surfaceDim,
+        color: updatedColorScheme.surfaceDim,
         thickness: 0.5,
       ),
       snackBarTheme: SnackBarThemeData(
         behavior: SnackBarBehavior.floating,
-        backgroundColor: colorScheme.primary,
+        backgroundColor: updatedColorScheme.primary,
         contentTextStyle: textTheme.labelSmall?.copyWith(
-          color: colorScheme.surface,
+          color: updatedColorScheme.surface,
           fontWeight: FontWeight.w600,
         ),
         showCloseIcon: true,
         elevation: 1,
       ),
-      dialogTheme: DialogThemeData(backgroundColor: colorScheme.surfaceContainerLowest),
+      dialogTheme: DialogThemeData(backgroundColor: updatedColorScheme.surfaceContainerLowest),
     );
   }
 }

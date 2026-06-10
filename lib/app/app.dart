@@ -18,7 +18,8 @@ class App extends ConsumerWidget {
     return MaterialApp.router(
       title: 'Flutter POS',
       theme: theme,
-      debugShowCheckedModeBanner: kDebugMode,
+      themeMode: ThemeMode.dark,
+      debugShowCheckedModeBanner: false,
       routerConfig: router,
       locale: AppLocale.defaultLocale,
       supportedLocales: AppLocale.supportedLocales,

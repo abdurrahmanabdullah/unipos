@@ -67,10 +67,10 @@ class AppRoutes {
         }
 
         if (isAuthenticated && isAuthRoute) {
-          return '/home';
+          return '/products';
         }
 
-        return isSplashRoute ? '/home' : null;
+        return isSplashRoute ? '/products' : null;
       },
       routes: [
         _splash(),
@@ -186,8 +186,20 @@ class AppRoutes {
     return GoRoute(
       path: 'product-create',
       parentNavigatorKey: navNavigatorKey,
-      builder: (context, state) {
-        return const ProductFormScreen();
+      pageBuilder: (context, state) {
+        return CustomTransitionPage(
+          key: state.pageKey,
+          child: const ProductFormScreen(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return SlideTransition(
+              position: Tween<Offset>(
+                begin: const Offset(1.0, 0.0),
+                end: Offset.zero,
+              ).animate(animation),
+              child: child,
+            );
+          },
+        );
       },
     );
   }
@@ -195,14 +207,26 @@ class AppRoutes {
   GoRoute _productEdit() {
     return GoRoute(
       path: 'product-edit/:id',
-      builder: (context, state) {
+      pageBuilder: (context, state) {
         int? id = int.tryParse(state.pathParameters["id"] ?? '');
 
         if (id == null) {
           throw 'Required productId is not provided!';
         }
 
-        return ProductFormScreen(id: id);
+        return CustomTransitionPage(
+          key: state.pageKey,
+          child: ProductFormScreen(id: id),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return SlideTransition(
+              position: Tween<Offset>(
+                begin: const Offset(1.0, 0.0),
+                end: Offset.zero,
+              ).animate(animation),
+              child: child,
+            );
+          },
+        );
       },
     );
   }
@@ -210,14 +234,26 @@ class AppRoutes {
   GoRoute _productDetail() {
     return GoRoute(
       path: 'product-detail/:id',
-      builder: (context, state) {
+      pageBuilder: (context, state) {
         int? id = int.tryParse(state.pathParameters["id"] ?? '');
 
         if (id == null) {
           throw 'Required productId is not provided!';
         }
 
-        return ProductDetailScreen(id: id);
+        return CustomTransitionPage(
+          key: state.pageKey,
+          child: ProductDetailScreen(id: id),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return SlideTransition(
+              position: Tween<Offset>(
+                begin: const Offset(1.0, 0.0),
+                end: Offset.zero,
+              ).animate(animation),
+              child: child,
+            );
+          },
+        );
       },
     );
   }

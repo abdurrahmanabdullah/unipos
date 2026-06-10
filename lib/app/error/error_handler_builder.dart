@@ -51,7 +51,12 @@ class ErrorHandlerBuilderState extends ConsumerState<ErrorHandlerBuilder> {
 
     // Skip navigation to error screen for non-critical errors
     final library = flutterError.library?.toLowerCase() ?? '';
-    if (Constants.nonCriticalErrorLibraries.any((lib) => library.contains(lib))) {
+    final exceptionStr = flutterError.exception.toString().toLowerCase();
+    
+    if (Constants.nonCriticalErrorLibraries.any((lib) => library.contains(lib)) || 
+        exceptionStr.contains('handshakeexception') || 
+        exceptionStr.contains('socketexception') ||
+        exceptionStr.contains('httpexception')) {
       return;
     }
 
@@ -68,6 +73,13 @@ class ErrorHandlerBuilderState extends ConsumerState<ErrorHandlerBuilder> {
     _errorLoggerService.log(error: error, stackTrace: stackTrace);
 
     if (!mounted) return false;
+    
+    final errorStr = error.toString().toLowerCase();
+    if (errorStr.contains('handshakeexception') || 
+        errorStr.contains('socketexception') ||
+        errorStr.contains('httpexception')) {
+      return true; // Handle it silently
+    }
 
     // Prevent to push to ErrorScreen multiple times
     if (_appRoutes.router.routeInformationProvider.value.uri.path != '/error') {

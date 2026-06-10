@@ -5,6 +5,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 import '../../../core/common/result.dart';
 import '../interfaces/storage_datasource.dart';
 
+import 'package:path_provider/path_provider.dart';
+
 class StorageRemoteDataSourceImpl implements StorageDataSource {
   final FirebaseStorage _firebaseStorage;
 
@@ -28,17 +30,23 @@ class StorageRemoteDataSourceImpl implements StorageDataSource {
 
   @override
   Future<Result<String>> uploadProductImage(String imgPath) async {
-    final ref = _firebaseStorage
-        .ref()
-        .child('products')
-        .child('ProductImage_${DateTime.now().millisecondsSinceEpoch}.jpg');
+    try {
+      final file = File(imgPath);
+      final directory = await getApplicationDocumentsDirectory();
+      
+      // Ensure directory exists
+      final path = '${directory.path}/flutter_pos_images';
+      final imgDir = Directory(path);
+      if (!await imgDir.exists()) {
+        await imgDir.create(recursive: true);
+      }
 
-    final metadata = SettableMetadata(contentType: 'image/jpeg');
-
-    final taskSnapshot = await ref.putFile(File(imgPath), metadata);
-
-    final url = await taskSnapshot.ref.getDownloadURL();
-
-    return Result.success(data: url);
+      final fileName = 'ProductImage_${DateTime.now().millisecondsSinceEpoch}.jpg';
+      final savedImage = await file.copy('${imgDir.path}/$fileName');
+      
+      return Result.success(data: savedImage.path);
+    } catch (e) {
+      return Result.failure(error: e);
+    }
   }
 }

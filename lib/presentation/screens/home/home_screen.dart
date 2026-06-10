@@ -75,7 +75,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       body: SlidingUpPanel(
         controller: panelController,
         minHeight: 88,
-        maxHeight: AppSizes.screenHeight(context) - AppSizes.appBarHeight() - AppSizes.viewPadding(context).top,
+        maxHeight:
+            AppSizes.screenHeight(context) -
+            AppSizes.appBarHeight() -
+            AppSizes.viewPadding(context).top,
         color: Theme.of(context).colorScheme.surfaceContainerLowest,
         boxShadow: [
           BoxShadow(
@@ -116,8 +119,12 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final allProducts = ref.watch(productsNotifierProvider.select((p) => p.allProducts));
-    final isLoadingMore = ref.watch(productsNotifierProvider.select((p) => p.isLoadingMore));
+    final allProducts = ref.watch(
+      productsNotifierProvider.select((p) => p.allProducts),
+    );
+    final isLoadingMore = ref.watch(
+      productsNotifierProvider.select((p) => p.isLoadingMore),
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -135,7 +142,9 @@ class _Body extends ConsumerWidget {
           child: CustomScrollView(
             controller: scrollController,
             // Disable scroll when data is null or empty
-            physics: (allProducts?.isEmpty ?? true) ? const NeverScrollableScrollPhysics() : null,
+            physics: (allProducts?.isEmpty ?? true)
+                ? const NeverScrollableScrollPhysics()
+                : null,
             slivers: [
               SliverAppBar(
                 floating: true,
@@ -144,7 +153,9 @@ class _Body extends ConsumerWidget {
                 collapsedHeight: 70,
                 titleSpacing: 0,
                 title: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: AppSizes.padding),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppSizes.padding,
+                  ),
                   child: _SearchField(controller: searchFieldController),
                 ),
               ),
@@ -166,25 +177,33 @@ class _Body extends ConsumerWidget {
                       hasScrollBody: false,
                       fillOverscroll: true,
                       child: Padding(
-                        padding: const EdgeInsets.only(bottom: 140),
+                        padding: const EdgeInsets.only(bottom: 40),
                         child: AppEmptyState(
-                          subtitle: 'No products available, add product to continue',
+                          subtitle:
+                              'No products available, add product to continue',
                           buttonText: 'Add Product',
-                          onTapButton: () => context.push('/products/product-create'),
+                          onTapButton: () =>
+                              context.push('/products/product-create'),
                         ),
                       ),
                     );
                   }
 
                   return SliverPadding(
-                    padding: const EdgeInsets.fromLTRB(AppSizes.padding, 2, AppSizes.padding, AppSizes.padding),
+                    padding: const EdgeInsets.fromLTRB(
+                      AppSizes.padding,
+                      2,
+                      AppSizes.padding,
+                      AppSizes.padding,
+                    ),
                     sliver: SliverGrid.builder(
-                      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                        maxCrossAxisExtent: 200,
-                        childAspectRatio: 1 / 1.5,
-                        crossAxisSpacing: AppSizes.padding / 2,
-                        mainAxisSpacing: AppSizes.padding / 2,
-                      ),
+                      gridDelegate:
+                          const SliverGridDelegateWithMaxCrossAxisExtent(
+                            maxCrossAxisExtent: 200,
+                            childAspectRatio: 1 / 1.5,
+                            crossAxisSpacing: AppSizes.padding / 2,
+                            mainAxisSpacing: AppSizes.padding / 2,
+                          ),
                       itemCount: allProducts.length,
                       itemBuilder: (context, i) {
                         return _ProductCard(product: allProducts[i]);
@@ -257,8 +276,12 @@ class _SyncButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isHasQueuedActions = ref.watch(mainNotifierProvider.select((p) => p.isHasQueuedActions));
-    final isSyncronizing = ref.watch(mainNotifierProvider.select((p) => p.isSyncronizing));
+    final isHasQueuedActions = ref.watch(
+      mainNotifierProvider.select((p) => p.isHasQueuedActions),
+    );
+    final isSyncronizing = ref.watch(
+      mainNotifierProvider.select((p) => p.isSyncronizing),
+    );
 
     return Padding(
       padding: const EdgeInsets.only(right: AppSizes.padding / 4),
@@ -312,7 +335,9 @@ class _NetworkInfo extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isHasInternet = ref.watch(mainNotifierProvider.select((provider) => provider.isHasInternet));
+    final isHasInternet = ref.watch(
+      mainNotifierProvider.select((provider) => provider.isHasInternet),
+    );
 
     return Padding(
       padding: const EdgeInsets.only(right: AppSizes.padding),
@@ -326,10 +351,16 @@ class _NetworkInfo extends ConsumerWidget {
         child: Icon(
           isHasInternet ? Icons.wifi_rounded : Icons.wifi_off_rounded,
           size: 12,
-          color: isHasInternet ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.outline,
+          color: isHasInternet
+              ? Theme.of(context).colorScheme.primary
+              : Theme.of(context).colorScheme.outline,
         ),
         onTap: () {
-          AppSnackBar.show(isHasInternet ? 'Online mode' : 'No internet connection, running in offline mode');
+          AppSnackBar.show(
+            isHasInternet
+                ? 'Online mode'
+                : 'No internet connection, running in offline mode',
+          );
         },
       ),
     );
@@ -351,10 +382,14 @@ class _SearchField extends ConsumerWidget {
       onEditingComplete: () {
         FocusScope.of(context).unfocus();
         ref.read(productsNotifierProvider.notifier).resetProducts();
-        ref.read(productsNotifierProvider.notifier).getAllProducts(contains: controller.text);
+        ref
+            .read(productsNotifierProvider.notifier)
+            .getAllProducts(contains: controller.text);
       },
       onTapClearButton: () {
-        ref.read(productsNotifierProvider.notifier).getAllProducts(contains: controller.text);
+        ref
+            .read(productsNotifierProvider.notifier)
+            .getAllProducts(contains: controller.text);
       },
     );
   }
@@ -373,7 +408,12 @@ class _ProductCard extends ConsumerWidget {
       onTap: () {
         final homeState = ref.read(homeNotifierProvider);
 
-        int currentQty = homeState.orderedProducts.where((e) => e.productId == product.id).firstOrNull?.quantity ?? 0;
+        int currentQty =
+            homeState.orderedProducts
+                .where((e) => e.productId == product.id)
+                .firstOrNull
+                ?.quantity ??
+            0;
 
         AppDialog.show(
           title: 'Enter Amount',
@@ -393,7 +433,9 @@ class _ProductCard extends ConsumerWidget {
             context.pop();
           },
           onTapRightButton: (context) {
-            ref.read(homeNotifierProvider.notifier).onAddOrderedProduct(product, currentQty == 0 ? 1 : currentQty);
+            ref
+                .read(homeNotifierProvider.notifier)
+                .onAddOrderedProduct(product, currentQty == 0 ? 1 : currentQty);
             context.pop();
           },
         );

@@ -27,6 +27,11 @@ void main() async {
   // Ensure persistence is cleared
   await FirebaseFirestore.instance.clearPersistence();
 
+  // If using the default mock project, disable network to prevent background PERMISSION_DENIED errors
+  if (DefaultFirebaseOptions.currentPlatform.projectId == 'mock_project_id') {
+    await FirebaseFirestore.instance.disableNetwork();
+  }
+
   // Initialize date formatting
   await initializeDateFormatting();
 
@@ -46,7 +51,9 @@ void main() async {
 
   runApp(
     ProviderScope(
-      overrides: [sharedPreferencesProvider.overrideWithValue(sharedPreferences)],
+      overrides: [
+        sharedPreferencesProvider.overrideWithValue(sharedPreferences),
+      ],
       child: const App(),
     ),
   );

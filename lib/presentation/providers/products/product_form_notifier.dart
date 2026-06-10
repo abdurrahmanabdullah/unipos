@@ -77,10 +77,11 @@ class ProductFormNotifier extends AutoDisposeNotifier<ProductFormState> {
         description: state.description ?? '',
       );
 
+      final productsNotifier = ref.read(productsNotifierProvider.notifier);
       var res = await CreateProductUsecase(productRepository).call(product);
 
       // Refresh products
-      ref.read(productsNotifierProvider.notifier).getAllProducts();
+      productsNotifier.getAllProducts();
 
       return res;
     } catch (e) {
@@ -113,10 +114,11 @@ class ProductFormNotifier extends AutoDisposeNotifier<ProductFormState> {
         description: state.description ?? '',
       );
 
+      final productsNotifier = ref.read(productsNotifierProvider.notifier);
       var res = await UpdateProductUsecase(productRepository).call(product);
 
       // Refresh products
-      ref.read(productsNotifierProvider.notifier).getAllProducts();
+      productsNotifier.getAllProducts();
 
       return res;
     } catch (e) {
@@ -127,10 +129,11 @@ class ProductFormNotifier extends AutoDisposeNotifier<ProductFormState> {
   Future<Result<void>> deleteProduct(int id) async {
     try {
       final productRepository = ref.read(productRepositoryProvider);
+      final productsNotifier = ref.read(productsNotifierProvider.notifier);
       var res = await DeleteProductUsecase(productRepository).call(id);
 
       // Refresh products
-      ref.read(productsNotifierProvider.notifier).getAllProducts();
+      productsNotifier.getAllProducts();
 
       return res;
     } catch (e) {

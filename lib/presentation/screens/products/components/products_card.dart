@@ -25,31 +25,29 @@ class ProductsCard extends StatelessWidget {
         splashColor: Colors.black.withValues(alpha: 0.06),
         splashFactory: InkRipple.splashFactory,
         highlightColor: Colors.black12,
-        borderRadius: BorderRadius.circular(4),
+        borderRadius: BorderRadius.circular(12),
         child: Ink(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.surface,
-            borderRadius: BorderRadius.circular(6),
+            borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              width: 0.5,
-              color: Theme.of(context).colorScheme.surfaceContainerHighest,
+              width: 1,
+              color: Theme.of(context).colorScheme.surfaceContainerHighest.withOpacity(0.1),
             ),
           ),
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 146, maxHeight: 226),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Stack(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Stack(
                   children: [
-                    AspectRatio(
-                      aspectRatio: 1,
+                    SizedBox(
+                      width: double.infinity,
                       child: AppImage(
                         image: product.imageUrl,
-                        borderRadius: BorderRadius.circular(4),
-                        border: Border.all(width: 0.5, color: Theme.of(context).colorScheme.surfaceContainerHighest),
-                        backgroundColor: Theme.of(context).colorScheme.surfaceContainerLowest,
+                        borderRadius: BorderRadius.circular(8),
+                        fit: BoxFit.cover,
                         errorWidget: Icon(
                           Icons.image,
                           color: Theme.of(context).colorScheme.surfaceDim,
@@ -57,38 +55,64 @@ class ProductsCard extends StatelessWidget {
                         ),
                       ),
                     ),
-                    product.stock <= 0 ? _OutOfStock() : const SizedBox.shrink(),
+                    product.stock <= 0 ? const _OutOfStock() : const SizedBox.shrink(),
                   ],
                 ),
-                const SizedBox(height: 8),
-                Text(
-                  product.name,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 8),
-                Row(
-                  children: [
-                    Icon(
-                      Icons.inventory_2,
-                      size: 8,
-                      color: Theme.of(context).colorScheme.outline,
+              ),
+              const SizedBox(height: 12),
+              Row(
+                children: [
+                  Text(
+                    CurrencyFormatter.format(product.price),
+                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    CurrencyFormatter.format(product.price * 1.1), // Mocked crossed price
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey,
+                      decoration: TextDecoration.lineThrough,
                     ),
-                    const SizedBox(width: 4),
-                    Text(
-                      'Stock ${product.stock}  |  Sold ${product.sold}',
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 8),
-                    ),
-                  ],
+                  ),
+                ],
+              ),
+              const SizedBox(height: 4),
+              Text(
+                product.name,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(color: Colors.grey, fontSize: 13),
+              ),
+              const SizedBox(height: 8),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      const Icon(Icons.star_border, color: Colors.orange, size: 14),
+                      const SizedBox(width: 4),
+                      Text('5.0', style: TextStyle(color: Colors.grey.shade400, fontSize: 12)),
+                    ],
+                  ),
+                  Text('${product.sold} Sold', style: TextStyle(color: Colors.grey.shade400, fontSize: 12)),
+                ],
+              ),
+              const SizedBox(height: 12),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
+                    foregroundColor: Theme.of(context).colorScheme.primary,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                    elevation: 0,
+                  ),
+                  child: const Text('Add Card'),
                 ),
-                const SizedBox(height: 8),
-                Text(
-                  CurrencyFormatter.format(product.price),
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.bold),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
